@@ -70,8 +70,46 @@ describe('GET/api', () => {
     })
 })
 
+describe('GET/api/articles/:article_id', () => {
+    test('200: should respond with an article object, containing the specified properties', () => {
+        return request(app)
+        .get('/api/articles/10')
+        .expect(200)
+        .then(({body}) => {
+            const article = body
+            expect(typeof article.author).toEqual('string')
+            expect(typeof article.title).toEqual('string')
+            expect(typeof article.article_id).toEqual('number')
+            expect(typeof article.body).toEqual('string')
+            expect(typeof article.topic).toEqual('string')
+            expect(typeof article.created_at).toEqual('string')
+            expect(typeof article.votes).toEqual('number')
+            expect(typeof article.article_img_url).toEqual('string')
+        })
+    })
+    test('400: should respond with an error message when article_id is invalid', () => {
+        return request(app)
+        .get('/api/articles/invalid_id')
+        .expect(400)
+        .then(({body}) => {
+            expect(body.msg).toEqual('article_id is invalid')
+        })
+    })
+    test('404: should respond with an error message when article_id is of valid type, but not found', () => {
+        return request(app)
+        .get('/api/articles/999')
+        .expect(404)
+        .then(({body}) => {
+         expect(body.msg).toEqual('No article found for article_id: 999')
+        })
+    })
+})
+
+
+
 /* 
 NOTES:
 **Manually add any new endpoints to endpoints.JSON 
-**Update GET/api/topics testing (refer to T2 feedback)
+**Update GET/api/topics testing (refer to T2 feedback) 
+**Update GET/api/articles/:article_id testing (refer to T3 feedback) 
 */
