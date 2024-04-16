@@ -3,6 +3,7 @@ const testDb = require('../db/connection')
 const seed = require('../db/seeds/seed')
 const app = require('../app')
 const request = require('supertest')
+const endpoints = require('../endpoints.json')
 
 beforeEach(() => seed(testData))
 afterAll(() => testDb.end)
@@ -30,16 +31,47 @@ describe('GET/api/topics', () => {
                 expect(topic).toHaveProperty('description')
             })
         })
-        
+    })
+})
+describe('GET/api', () => {
+    test('200: should respond with an object describing all available endpoints', () => {
+        return request(app)
+        .get('/api')
+        .expect(200)
+        .then(({body}) => {
+            const resEndpoints = body
+            expect(resEndpoints).toEqual(endpoints)
+        })
+    })
+    test('200: should respond with a nested object, with each inner object given an appropriate name', () => {
+        return request(app)
+        .get('/api')
+        .expect(200)
+        .then(({body}) => {
+            const endpointNames = Object.keys(body)
+            const regex = /(^GET |^POST |^PATCH |^DELETE )(\/api)/
+            endpointNames.forEach((endpointName) => {
+                expect(regex.test(endpointName)).toBe(true)
+            })
+        })
+    })
+    test('200: should respond with objects containing the correct properties', () => {
+        return request(app)
+        .get('/api')
+        .expect(200)
+        .then(({body}) => {
+            const endpointsDetails = Object.values(body)
+            endpointsDetails.forEach((endpointDetails) => {
+                expect(typeof endpointDetails.description).toEqual('string')
+                expect(typeof endpointDetails.queries).toEqual('object')
+                expect(typeof endpointDetails.exampleResponse).toEqual('object')
+            })
+        })
     })
 })
 
 /* 
-1. require anything needed
-2. GET/api/topics; should get all topics, responding with an array of topic objects (containing properties; slug, description)
-3. GET/api/topics; tests: 
-- HP: returns an array
-- HP: returns two properties of slug & description
-4. Set-up general error tests, keep at top of file
-5. do the pull request, delete branch, send to nchelp pr
+NOTES:
+**Manually add any new endpoints to endpoints.JSON 
+**Update GET/api/topics testing (refer to T2 feedback)
 */
