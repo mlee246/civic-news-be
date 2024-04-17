@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 const {findTopics, findEndPoints} = require('./controllers/topics.controller')
-const {findArticleById} = require('./controllers/articles.controller')
+const {findArticleById, findArticles} = require('./controllers/articles.controller')
 
 app.get('/api/topics', findTopics)
 
@@ -9,20 +9,22 @@ app.get('/api', findEndPoints)
 
 app.get('/api/articles/:article_id', findArticleById)
 
-app.use((error, request, response, next) => {
-    if(error.code === '22P02'){
-        response.status(400).send({msg: 'article_id is invalid'})
-    } else next (error)
+app.get('/api/articles', findArticles)
+
+app.use((err, req, res, next) => {
+    if(err.code === '22P02'){
+        res.status(400).send({msg: 'article_id is invalid'})
+    } else next (err)
 })
 
-app.use((error, request, response, next) => {
-    if (error.status) {
-        response.status(error.status).send({msg: error.msg})
-    } else next(error)
+app.use((err, req, res, next) => {
+    if (err.status) {
+        res.status(err.status).send({msg: err.msg})
+    } else next(err)
 })
 
-app.use((request, response, next) => {
-    response.status(404).send({msg:'not found'})
+app.use((req, res, next) => {
+    res.status(404).send({msg:'not found'})
 })
 
 
