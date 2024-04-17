@@ -104,6 +104,7 @@ describe('GET/api/articles/:article_id', () => {
         })
     })
 })
+
 describe('GET/api/articles', () => {
     test('200: responds with an array containing the correct number of articles', () => {
         return request(app)
@@ -143,6 +144,77 @@ describe('GET/api/articles', () => {
     })
 })
 
+describe('GET/api/articles/:article_id/comments', () => {
+    test('200: should respond with correct number of comments for the article', () => {
+        return request(app)
+        .get('/api/articles/1/comments')
+        .expect(200)
+        .then(({body}) => {
+            const {comments} = body
+            expect(comments.length).toBe(11)
+        }) 
+        .then(() => {
+            return request(app)
+            .get('/api/articles/9/comments')
+            .expect(200)
+            .then(({body}) => {
+                const {comments} = body
+                expect(comments.length).toBe(2)
+            })
+        })
+    })
+    test('200: should respond with an array of comment objects, containing the specified properties', () => {
+        return request(app)
+        .get('/api/articles/1/comments')
+        .expect(200)
+        .then(({body}) => {
+            const {comments} = body
+            comments.forEach((comment) => {
+                expect(typeof comment.comment_id).toEqual('number')
+                expect(typeof comment.votes).toEqual('number')
+                expect(typeof comment.created_at).toEqual('string')
+                expect(typeof comment.author).toEqual('string')
+                expect(typeof comment.body).toEqual('string')
+                expect(typeof comment.article_id).toEqual('number')
+            })
+        })  
+    })
+    test('200: should respond with an array of comment objects, in order of most recent comments first', () => {
+        return request(app)
+        .get('/api/articles/1/comments')
+        .expect(200)
+        .then(({body}) => {
+            const {comments} = body
+            expect(comments).toBeSortedBy('created_at')
+        })
+    })
+    test('400: should respond with an error message when article_id is invalid', () => {
+        return request(app)
+        .get('/api/articles/invalid_id/comments')
+        .expect(400)
+        .then(({body}) => {
+            expect(body.msg).toEqual('article_id is invalid')
+        })
+    })
+    test('404: should respond with an error message when article_id is of valid type, but not found', () => {
+        return request(app)
+        .get('/api/articles/9999/comments')
+        .expect(404)
+        .then(({body}) => {
+         expect(body.msg).toEqual('No article found for article_id: 9999')
+        })
+    })
+    test('404: should respond with an error message when article_id is valid, but there are no comments associated with it', () => {
+        return request(app)
+        .get('/api/articles/2/comments')
+        .expect(404)
+        .then(({body}) => {
+            expect(body.msg).toEqual('This article has no comments.')
+        })
+
+    })
+})
+
 
 
 /* 
@@ -153,4 +225,5 @@ NOTES:
 **Update GET/api/topics testing (refer to T2 feedback) 
 **Update GET/api testing (refer to T3 feedback) 
 **Update GET/api/articles/:article_id testing (refer to T4 feedback) 
+**Update GET/api/articles testing (refer to T5 feedback) 
 */
