@@ -104,12 +104,54 @@ describe('GET/api/articles/:article_id', () => {
         })
     })
 })
+describe('GET/api/articles', () => {
+    test('200: responds with an array containing the correct number of articles', () => {
+        return request(app)
+        .get('/api/articles')
+        .expect(200)
+        .then(({body}) => {
+            const {articles} = body
+            expect(articles.length).toBe(13)
+        })
+    })
+    test('200: responds with an array containing article objects with the specified properties', () => {
+        return request(app)
+        .get('/api/articles')
+        .expect(200)
+        .then(({body}) => {
+            const {articles} = body
+            articles.forEach((article) => {
+                expect(typeof article.author).toEqual('string')
+                expect(typeof article.title).toEqual('string')
+                expect(typeof article.article_id).toEqual('number')
+                expect(typeof article.topic).toEqual('string')
+                expect(typeof article.created_at).toEqual('string')
+                expect(typeof article.votes).toEqual('number')
+                expect(typeof article.article_img_url).toEqual('string')
+                expect(typeof article.comment_count).toEqual('number')
+            })
+        })
+    })
+    test('200: response should be sorted by date in descending order', () => {
+        return request(app)
+        .get('/api/articles')
+        .expect(200)
+        .then(({body}) => {
+            const {articles} = body
+            console.log(articles)
+            expect(articles).toBeSortedBy('created_at', {descending:true,})
+        })
+    })
+})
 
 
 
 /* 
+NEXT JOBS; 
+**
 NOTES:
 **Manually add any new endpoints to endpoints.JSON 
 **Update GET/api/topics testing (refer to T2 feedback) 
-**Update GET/api/articles/:article_id testing (refer to T3 feedback) 
+**Update GET/api testing (refer to T3 feedback) 
+**Update GET/api/articles/:article_id testing (refer to T4 feedback) 
 */

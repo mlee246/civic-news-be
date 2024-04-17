@@ -1,10 +1,17 @@
-const {getArticleById} = require('../models/articles.models')
+const {getArticleById, getArticles} = require('../models/articles.models')
 
-exports.findArticleById = (request, response, next) => {
-    const {article_id} = request.params
+exports.findArticleById = (req, res, next) => {
+    const {article_id} = req.params
     getArticleById(article_id)
     .then((article) => {
-        response.status(200).send(article)
+        res.status(200).send(article)
     })
     .catch(next)
+}
+
+exports.findArticles = (req, res, next) => {
+    getArticles()
+    .then((articles) => {
+        res.status(200).send({articles: articles})
+    })
 }
