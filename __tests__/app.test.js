@@ -33,6 +33,7 @@ describe("GET/api/topics", () => {
       });
   });
 });
+
 describe("GET/api", () => {
   test("200: should respond with an object describing all available endpoints", () => {
     return request(app)
@@ -336,6 +337,31 @@ describe("DELETE/api/comments/:comment_id", () => {
       });
   });
 });
+
+describe('GET/api/users', () => {
+  test('200: should respond with an array of the correct number of user objects', () => {
+    return request(app)
+    .get("/api/users")
+    .expect(200)
+    .then(({ body }) => {
+      const { users } = body;
+      expect(users.length).toBe(4);
+    });
+  })
+  test("200: responds with an array containing user objects with the specified properties", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then(({ body }) => {
+        const { users } = body;
+        users.forEach((user) => {
+          expect(typeof user.username).toEqual("string");
+          expect(typeof user.name).toEqual("string");
+          expect(typeof user.avatar_url).toEqual("string");
+        });
+      });
+  });
+})
 
 /* 
 NEXT JOBS; 

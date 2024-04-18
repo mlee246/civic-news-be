@@ -15,6 +15,10 @@ const {
   deleteCommentById
 } = require("./controllers/comments.controller");
 
+const {
+  findUsers
+} = require("./controllers/users.controller");
+
 app.use(express.json());
 
 app.get("/api/topics", findTopics);
@@ -32,6 +36,8 @@ app.post("/api/articles/:article_id/comments", sendComment);
 app.patch("/api/articles/:article_id", updateVotes);
 
 app.delete("/api/comments/:comment_id", deleteCommentById);
+
+app.get("/api/users", findUsers)
 
 app.use((err, req, res, next) => {
   if (err.code === "22P02") {
