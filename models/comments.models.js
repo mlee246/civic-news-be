@@ -28,3 +28,23 @@ ORDER BY comments.created_at ASC
  })
 })
 }
+
+exports.postComment = (newComment, article_id) => {
+const username = newComment.username
+const comment = newComment.body
+return db.query(`
+INSERT INTO comments(author, body, article_id) 
+VALUES ($1, $2, $3) 
+RETURNING body 
+;`, [username, comment, article_id])
+.then(({rows}) => {
+    return rows[0]
+    })
+}
+
+
+
+/*
+
+
+*/
