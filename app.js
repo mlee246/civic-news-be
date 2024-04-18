@@ -11,7 +11,8 @@ const {
 } = require("./controllers/articles.controller");
 const {
   findCommentsById,
-  sendComment,
+  sendComment, 
+  deleteCommentById
 } = require("./controllers/comments.controller");
 
 app.use(express.json());
@@ -30,9 +31,11 @@ app.post("/api/articles/:article_id/comments", sendComment);
 
 app.patch("/api/articles/:article_id", updateVotes);
 
+app.delete("/api/comments/:comment_id", deleteCommentById);
+
 app.use((err, req, res, next) => {
   if (err.code === "22P02") {
-    res.status(400).send({ msg: "article_id is invalid" });
+    res.status(400).send({ msg: "Bad request" });
   } else next(err);
 });
 
