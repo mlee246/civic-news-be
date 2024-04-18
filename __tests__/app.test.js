@@ -257,6 +257,65 @@ describe('POST/api/articles/:article_id/comments', () => {
     })
 })
 
+describe.only('PATCH/api/articles/:article_id', () => {
+    test('200: should return the updated article with votes increased when given a positive value', () => {
+        return request(app)
+        .patch('/api/articles/1')
+        .send({inc_votes: 1})
+        .expect(200)
+        .then((response) => {
+            expect(response.body.article).toEqual({
+                article_id: 1,
+                title: "Living in the shadow of a great man",
+                topic: "mitch",
+                author: "butter_bridge",
+                body: "I find this existence challenging",
+                created_at: "2020-07-09T20:11:00.000Z",
+                votes: 101,
+                article_img_url:
+                  "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+              })
+        })
+    })
+    test('200: should return the updated article with votes decreased when given a negative value', () => {
+        return request(app)
+        .patch('/api/articles/1')
+        .send({inc_votes: -1})
+        .expect(200)
+        .then((response) => {
+            expect(response.body.article).toEqual({
+                article_id: 1,
+                title: "Living in the shadow of a great man",
+                topic: "mitch",
+                author: "butter_bridge",
+                body: "I find this existence challenging",
+                created_at: "2020-07-09T20:11:00.000Z",
+                votes: 99,
+                article_img_url:
+                  "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+              })
+        })
+    })
+    test('400: should respond with an error message when article_id is invalid', () => {
+        return request(app)
+        .patch('/api/articles/invalid_id')
+        .send({inc_votes: 1})
+        .expect(400)
+        .then(({body}) => {
+            expect(body.msg).toEqual('article_id is invalid')
+        })
+    })
+    test('404: should respond with an error message when article_id is of valid type, but not found', () => {
+        return request(app)
+        .patch('/api/articles/999')
+        .send({inc_votes: 1})
+        .expect(404)
+        .then(({body}) => {
+         expect(body.msg).toEqual('No article found for article_id: 999')
+        })
+    })
+})
+
 /* 
 NEXT JOBS; 
 **
