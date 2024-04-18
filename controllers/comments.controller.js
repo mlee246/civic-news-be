@@ -16,7 +16,7 @@ getArticleById(article_id)
 .then(({article_id}) => {
         const newComment = req.body
         postComment(newComment, article_id)
-        .then(({body}) => {
+.then(({body}) => {
         res.status(201).send({comment:body})  
  })
 })
