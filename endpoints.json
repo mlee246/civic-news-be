@@ -1,4 +1,9 @@
 {
+  "DELETE /api/comments/:comment_id": {
+    "description": "deletes the comment associated with the given comment_id",
+    "queries": [],
+    "exampleResponse":    {} 
+},
   "PATCH /api/articles/:article_id": {
     "description": "increases/ decreases the articles votes",
     "queries": [],
