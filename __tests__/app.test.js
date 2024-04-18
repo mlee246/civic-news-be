@@ -215,7 +215,47 @@ describe('GET/api/articles/:article_id/comments', () => {
     })
 })
 
-
+describe('POST/api/articles/:article_id/comments', () => {
+    test('200: should add a comment to an article (specified by article_id) and respond with the posted comment', () => {
+        const testComment = {
+            username: 'butter_bridge',
+            body: 'test comment'
+        }
+        return request(app)
+        .post('/api/articles/2/comments')
+        .send(testComment)
+        .expect(201)
+        .then((response) => {
+            expect(response.body.comment).toBe('test comment')
+        })
+    })
+    test('400: should respond with an error message when article_id is invalid', () => {
+        const testComment = {
+            username: 'butter_bridge',
+            body: 'test comment'
+        }
+        return request(app)
+        .post('/api/articles/invalid_id/comments')
+        .send(testComment)
+        .expect(400)
+        .then(({body}) => {
+            expect(body.msg).toEqual('article_id is invalid')
+        })
+    })
+    test('404: should respond with an error message when article_id is of valid type, but not found', () => {
+        const testComment = {
+            username: 'butter_bridge',
+            body: 'test comment'
+        }
+        return request(app)
+        .post('/api/articles/999/comments')
+        .send(testComment)
+        .expect(404)
+        .then(({body}) => {
+         expect(body.msg).toEqual('No article found for article_id: 999')
+        })
+    })
+})
 
 /* 
 NEXT JOBS; 
