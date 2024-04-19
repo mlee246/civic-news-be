@@ -6,7 +6,7 @@ const request = require("supertest");
 const endpoints = require("../endpoints.json");
 
 beforeEach(() => seed(testData));
-afterAll(() => testDb.end);
+afterAll(() => testDb.end());
 
 describe("GET/api/topics/invalidinput", () => {
   test("404: responds with a message when an invalid endpoint has been requested", () => {
@@ -20,15 +20,16 @@ describe("GET/api/topics/invalidinput", () => {
 });
 
 describe("GET/api/topics", () => {
-  test("200: should return with an array of topic objects, with the correct properties", () => {
+  test("200: should return with an array of topic objects, of the correct length and with the correct properties", () => {
     return request(app)
       .get("/api/topics")
       .expect(200)
       .then(({ body }) => {
         const topics = body.topics;
+        expect(topics.length).toBe(3)
         topics.forEach((topic) => {
-          expect(topic).toHaveProperty("slug");
-          expect(topic).toHaveProperty("description");
+          expect(typeof topic.slug).toBe("string");
+          expect(typeof topic.description).toBe("string");
         });
       });
   });
