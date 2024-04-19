@@ -85,7 +85,16 @@ describe("GET/api/articles/:article_id", () => {
         expect(typeof article.topic).toEqual("string");
         expect(typeof article.created_at).toEqual("string");
         expect(typeof article.votes).toEqual("number");
-        expect(typeof article.article_img_url).toEqual("string");
+        expect(typeof article.article_img_url).toEqual("string")
+        expect(typeof article.comment_count).toEqual("number");
+      });
+  }); test("200: should respond with an article object, containing the correct comment count", () => {
+    return request(app)
+      .get("/api/articles/3")
+      .expect(200)
+      .then(({ body }) => {
+        const article = body;
+        expect(article.comment_count).toBe(2)
       });
   });
   test("400: should respond with an error message when article_id is invalid", () => {
