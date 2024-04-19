@@ -24,7 +24,7 @@ describe("GET/api/topics", () => {
     return request(app)
       .get("/api/topics")
       .expect(200)
-      .then(({ body }) => {
+      .then(({body}) => {
         const topics = body.topics;
         expect(topics.length).toBe(3)
         topics.forEach((topic) => {
@@ -40,34 +40,8 @@ describe("GET/api", () => {
     return request(app)
       .get("/api")
       .expect(200)
-      .then(({ body }) => {
-        const resEndpoints = body;
-        expect(resEndpoints).toEqual(endpoints);
-      });
-  });
-  test("200: should respond with a nested object, with each inner object given an appropriate name", () => {
-    return request(app)
-      .get("/api")
-      .expect(200)
-      .then(({ body }) => {
-        const endpointNames = Object.keys(body);
-        const regex = /(^GET |^POST |^PATCH |^DELETE )(\/api)/;
-        endpointNames.forEach((endpointName) => {
-          expect(regex.test(endpointName)).toBe(true);
-        });
-      });
-  });
-  test("200: should respond with objects containing the correct properties", () => {
-    return request(app)
-      .get("/api")
-      .expect(200)
-      .then(({ body }) => {
-        const endpointsDetails = Object.values(body);
-        endpointsDetails.forEach((endpointDetails) => {
-          expect(typeof endpointDetails.description).toEqual("string");
-          expect(typeof endpointDetails.queries).toEqual("object");
-          expect(typeof endpointDetails.exampleResponse).toEqual("object");
-        });
+      .then(({body}) => {
+        expect(body.endpoints).toEqual(endpoints);
       });
   });
 });

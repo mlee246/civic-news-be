@@ -1,13 +1,13 @@
-const {getTopics, getEndpoints} = require('../models/topics.models')
+const {getTopics} = require('../models/topics.models')
+const endpoints = require('../endpoints.json')
 
 
-exports.findTopics = (request, response, next) => {
+exports.findTopics = (req, res, next) => {
 getTopics()
 .then((topics) => {
-    response.status(200).send({topics})
+    res.status(200).send({topics:topics})
 })
 }
-exports.findEndPoints = (request, response, next) => {
-const endpoints = getEndpoints()
-response.status(200).send(endpoints)
+exports.findEndPoints = (req, res, next) => {
+res.status(200).send({endpoints:endpoints})
 }
