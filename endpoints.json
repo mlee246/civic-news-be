@@ -1,4 +1,19 @@
 {
+  "GET /api/articles?topic=a_valid_topic": {
+    "description": "serves an array of all articles relating to a specific topic (default to be sorted by date, descending)",
+    "queries": ["topic"],
+    "exampleResponse": {
+      "articles": [{
+          "title": "Seafood substitutions are increasing",
+          "topic": "cooking",
+          "author": "weegembump",
+          "body": "Text from the article..",
+          "created_at": "2018-05-30T15:59:13.341Z",
+          "votes": 0,
+          "comment_count": 6
+        }]
+    }
+  },
   "GET /api/users": {
     "description": "serves an array of all users",
     "queries": [],

@@ -143,6 +143,23 @@ describe("GET/api/articles", () => {
         expect(articles).toBeSortedBy("created_at", { descending: true });
       });
   });
+  test("200: responds with the correct number of article objects, when requested with a topic query", () => {
+    return request(app)
+    .get("/api/articles?topic=mitch")
+    .expect(200)
+    .then(({ body }) => {
+      const { articles } = body;
+      expect(articles.length).toBe(12);
+    });
+  })
+  test("404: should respond with an error message when the query is of valid type, but not found", () => {
+    return request(app)
+      .get("/api/articles/?topic=notatopic")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toEqual("notatopic: is not yet a valid topic");
+      });
+    })
 });
 
 describe("GET/api/articles/:article_id/comments", () => {

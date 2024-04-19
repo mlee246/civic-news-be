@@ -1,3 +1,4 @@
+const { query } = require("express");
 const {
   getArticleById,
   getArticles,
@@ -14,9 +15,12 @@ exports.findArticleById = (req, res, next) => {
 };
 
 exports.findArticles = (req, res, next) => {
-  getArticles().then((articles) => {
+const topic = req.query.topic
+  getArticles(topic)
+  .then((articles) => {
     res.status(200).send({ articles: articles });
-  });
+  })
+  .catch(next)
 };
 
 exports.updateVotes = (req, res, next) => {
