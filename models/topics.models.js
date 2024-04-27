@@ -1,10 +1,11 @@
-const db = require('../db/connection')
+const db = require("../db/connection");
 
 exports.getTopics = () => {
-return db.query(`
+  return db.query(`
 SELECT * 
-FROM topics;`)
-.then((result) => {
-    return result.rows;
-})
-}
+FROM topics;
+`)
+  .then((result) => {
+     return result.rows;
+   });
+};
