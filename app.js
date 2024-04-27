@@ -11,13 +11,17 @@ const {
 } = require("./controllers/articles.controller");
 const {
   findCommentsById,
-  sendComment, 
-  deleteCommentById
+  sendComment,
+  deleteCommentById,
 } = require("./controllers/comments.controller");
 
+const { findUsers } = require("./controllers/users.controller");
+
 const {
-  findUsers
-} = require("./controllers/users.controller");
+  handlePsqlErrors,
+  handleCustomErrors,
+  handleNotFoundErrors,
+} = require("./error-handlers");
 
 app.use(express.json());
 
@@ -37,22 +41,12 @@ app.patch("/api/articles/:article_id", updateVotes);
 
 app.delete("/api/comments/:comment_id", deleteCommentById);
 
-app.get("/api/users", findUsers)
+app.get("/api/users", findUsers);
 
-app.use((err, req, res, next) => {
-  if (err.code === "22P02") {
-    res.status(400).send({ msg: "Bad request" });
-  } else next(err);
-});
+app.use(handlePsqlErrors);
 
-app.use((err, req, res, next) => {
-  if (err.status) {
-    res.status(err.status).send({ msg: err.msg });
-  } else next(err);
-});
+app.use(handleCustomErrors);
 
-app.use((req, res, next) => {
-  res.status(404).send({ msg: "not found" });
-});
+app.use(handleNotFoundErrors);
 
 module.exports = app;

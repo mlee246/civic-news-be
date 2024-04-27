@@ -1,13 +1,11 @@
-const db = require('../db/connection')
-const endpoints = require('../endpoints.json')
+const db = require("../db/connection");
 
 exports.getTopics = () => {
-return db.query('SELECT * FROM topics;')
-.then((result) => {
-    return result.rows;
-})
-}
-
-exports.getEndpoints = () => {
-    return endpoints
-}
+  return db.query(`
+SELECT * 
+FROM topics;
+`)
+  .then((result) => {
+     return result.rows;
+   });
+};
