@@ -1,4 +1,5 @@
-const express = require("express");
+const express = require("express");''
+const cors = require('cors')
 const app = express();
 const {
   findTopics,
@@ -22,6 +23,8 @@ const {
   handleCustomErrors,
   handleNotFoundErrors,
 } = require("./error-handlers");
+
+app.use(cors())
 
 app.use(express.json());
 
