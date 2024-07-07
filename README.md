@@ -1,6 +1,6 @@
-# Northcoders News
+# Civic News
 
-Northcoders News is an API built for the purpose of accessing application data programatically. The API mimic's a real world backend service, which will provide the information to the front end architecture.
+Civic News is an API built for the purpose of accessing application data programatically. The API mimic's a real world backend service, which will provide the information to the front end architecture.
 
 #### https://be-nc-news-zmuo.onrender.com/api
 
@@ -13,7 +13,7 @@ The above link will take you to the hosted version (the landing page will provid
 ### 1. Clone the project
 
 ```bash
-git clone https://github.com/mlee246/be-nc-news.git
+git clone https://github.com/mlee246/civic-news-be.git
 ```
 
 ### 2. Create two new files; .env.development & .env.test; inside here please add the database names (as per .env-example).
